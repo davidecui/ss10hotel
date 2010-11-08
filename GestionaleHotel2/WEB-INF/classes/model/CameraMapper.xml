@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="model.CameraMapper" >
+	<resultMap type="model.Camera" id="CameraResultMap">
+		<id column="camera_id" property="id"/>
+		<result column="camera_numero" property="numero"/>
+		<association property="tipologia" column="camera_id_tipologia" javaType="model.Tipologia">
+			<id column="tipologia_id" property="id"/>
+			<result column="tipologia_nome" property="nome"/>
+		</association>
+	</resultMap>
+
+	<sql id="select_camera">
+		select C.id as camera_id, C.numero as camera_numero from Camera C
+	</sql>
+	
+	<select id="selectById" parameterType="int" resultMap="CameraResultMap">
+		<include refid="select_camera"/>
+		where C.id = #{id}
+	</select>
+	
+	<select id="selectByTipologia" parameterType="int" resultMap="CameraResultMap">
+		<include refid="select_camera"/>
+		where C.id_tipologia = #{id_tipologia}
+	</select>
+	
+	<select id="selectAll" resultMap="CameraResultMap">
+		<include refid="select_camera"/>
+	</select>
+		<insert id="insertCamera" parameterType="model.Camera">
+		
+		insert into Camera Values(#{id},#{numero},#{tipologia},#{piano}) 
+		</insert>
+
+</mapper>

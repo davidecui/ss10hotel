@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="model.StrutturaMapper" >
+	<resultMap type="model.Struttura" id="StrutturaResultMap">
+		<id column="struttura_id" property="id"/>
+		<result column="struttura_numero_piani" property="numero_piani"/>
+		<result column="struttura_descrizione" property="descrizione"/>		
+	</resultMap>
+
+	<sql id="select_struttura">
+		select S.id as struttura_id, S.numero_piani as struttura_numero_piani,
+		S.descrizione as struttura_descrizione from Struttura S
+	</sql>
+	
+	<select id="selectById" parameterType="int" resultMap="StrutturaResultMap">
+		<include refid="select_struttura"/>
+		where S.id = #{id}
+	</select>
+	
+	<select id="selectAll" resultMap="CameraResultMap">
+		<include refid="select_struttura"/>
+	</select>
+
+	<insert id="insertStruttura" parameterType="model.Struttura">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE"> 
+			select nextval('sequence1')
+		</selectKey>
+		insert into struttura values(#{id},#{numero_piani},#{descrizione})
+	</insert>
+
+</mapper>
